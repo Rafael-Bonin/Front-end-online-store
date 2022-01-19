@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Cart extends Component {
   render() {
@@ -7,4 +7,3 @@ class Cart extends Component {
 }
 
 export default Cart;
-
