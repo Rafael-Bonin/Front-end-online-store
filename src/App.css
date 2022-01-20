@@ -60,3 +60,7 @@
   padding: 0.5rem;
   width: 350px;
 }
+
+.tira-ponto {
+  list-style-type: none;
+}

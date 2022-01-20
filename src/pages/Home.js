@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Loading from '../components/Loading';
 import ProductList from '../components/ProductList';
 import '../App.css';
@@ -11,12 +11,19 @@ class Home extends React.Component {
 
     this.handlechangeSearch = this.handlechangeSearch.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.getAllCategories = this.getAllCategories.bind(this);
 
     this.state = {
       searchText: '',
       listProduct: [],
       isLoading: false,
+      isLoadingCategory: true,
+      categories: '',
     };
+  }
+
+  componentDidMount() {
+    this.getAllCategories();
   }
 
   handlechangeSearch({ target }) {
@@ -34,8 +41,13 @@ class Home extends React.Component {
     });
   }
 
+  async getAllCategories() {
+    const all = await getCategories();
+    this.setState({ categories: all, isLoadingCategory: false });
+  }
+
   render() {
-    const { listProduct, isLoading } = this.state;
+    const { listProduct, isLoading, isLoadingCategory, categories } = this.state;
 
     return (
       <div>
@@ -66,6 +78,18 @@ class Home extends React.Component {
 
         <Link data-testid="shopping-cart-button" to="/cart">Cart</Link>
 
+        <nav>
+          <ul>
+            { isLoadingCategory ? <Loading /> : categories.map((category) => (
+              <li key={ category.id } className="tira-ponto">
+                <label htmlFor="category" data-testid="category">
+                  { category.name }
+                  <input type="radio" key={ category.id } name="category" />
+                </label>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     );
   }
