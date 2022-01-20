@@ -15,8 +15,7 @@ class Home extends React.Component {
     this.state = {
       searchText: '',
       listProduct: [],
-      isLoading: true,
-      isVazio: false,
+      isLoading: false,
     };
   }
 
@@ -26,16 +25,17 @@ class Home extends React.Component {
 
   handleClick = async () => {
     const { Categorie, searchText } = this.state;
-    const CategorieRequest = await getProductsFromCategoryAndQuery(Categorie, searchText);
-    this.setState({
-      isLoading: false,
-      listProduct: CategorieRequest,
-      isVazio: CategorieRequest.length === 0,
+    this.setState({ isLoading: true }, async () => {
+      const CatRequest = await getProductsFromCategoryAndQuery(Categorie, searchText);
+      this.setState({
+        isLoading: false,
+        listProduct: CatRequest,
+      });
     });
   }
 
   render() {
-    const { listProduct, isLoading, isVazio } = this.state;
+    const { listProduct, isLoading } = this.state;
 
     return (
       <div>
@@ -60,12 +60,9 @@ class Home extends React.Component {
             </button>
           </section>
         </header>
-        {/* { console.log(listProduct) }
-        não estou conseguindo tirar o true da variavel isLoading para sumir o carregando inicial e nem o false da variavel isVazio para aparecer a frase quando não tem produto
-        { console.log(loading) } */}
-        {/* { console.log(isVazio) } */}
-        { isVazio && <h1>Nenhum produto foi encontrado</h1> }
-        { isLoading ? <Loading /> : <ProductList products={ listProduct } /> }
+
+        { isLoading && <Loading /> }
+        { listProduct.length !== 0 && <ProductList products={ listProduct } /> }
 
         <Link data-testid="shopping-cart-button" to="/cart">Cart</Link>
 
