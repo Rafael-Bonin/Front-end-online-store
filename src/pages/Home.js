@@ -4,6 +4,7 @@ import { getCategories, getProductsFromCategoryAndQuery } from '../services/api'
 import Loading from '../components/Loading';
 import ProductList from '../components/ProductList';
 import '../App.css';
+import Categories from '../components/Categories';
 
 class Home extends React.Component {
   constructor() {
@@ -12,6 +13,8 @@ class Home extends React.Component {
     this.handlechangeSearch = this.handlechangeSearch.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.getAllCategories = this.getAllCategories.bind(this);
+    this.renderCategory = this.renderCategory.bind(this);
+    this.a = this.a.bind(this);
 
     this.state = {
       searchText: '',
@@ -19,6 +22,7 @@ class Home extends React.Component {
       isLoading: false,
       isLoadingCategory: true,
       categories: '',
+      Category: '',
     };
   }
 
@@ -26,24 +30,34 @@ class Home extends React.Component {
     this.getAllCategories();
   }
 
+  async componentDidUpdate() {
+    const { isLoading } = this.state;
+    if (isLoading) {
+      this.a();
+    }
+  }
+
   handlechangeSearch({ target }) {
     this.setState({ searchText: target.value });
   }
 
   handleClick = async () => {
-    const { Categorie, searchText } = this.state;
-    this.setState({ isLoading: true }, async () => {
-      const CatRequest = await getProductsFromCategoryAndQuery(Categorie, searchText);
-      this.setState({
-        isLoading: false,
-        listProduct: CatRequest,
-      });
-    });
+    this.setState({ isLoading: true });
   }
 
   async getAllCategories() {
     const all = await getCategories();
     this.setState({ categories: all, isLoadingCategory: false });
+  }
+
+  async a() {
+    const { Category, searchText } = this.state;
+    const CatRequest = await getProductsFromCategoryAndQuery(Category, searchText);
+    this.setState({ listProduct: CatRequest, isLoading: false });
+  }
+
+  renderCategory({ target }) {
+    this.setState({ isLoading: true, Category: target.id });
   }
 
   render() {
@@ -79,16 +93,11 @@ class Home extends React.Component {
         <Link data-testid="shopping-cart-button" to="/cart">Cart</Link>
 
         <nav>
-          <ul>
-            { isLoadingCategory ? <Loading /> : categories.map((category) => (
-              <li key={ category.id } className="tira-ponto">
-                <label htmlFor="category" data-testid="category">
-                  { category.name }
-                  <input type="radio" key={ category.id } name="category" />
-                </label>
-              </li>
-            ))}
-          </ul>
+          <Categories
+            categoriesProp={ categories }
+            isLoadingCategoryProp={ isLoadingCategory }
+            renderCategory={ this.renderCategory }
+          />
         </nav>
       </div>
     );
