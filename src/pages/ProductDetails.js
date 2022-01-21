@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { getProductFromId } from '../services/api';
 
 class ProductDetails extends Component {
@@ -28,18 +29,21 @@ class ProductDetails extends Component {
 
   render() {
     const { product } = this.state;
-    return <p data-testid="product-detail-name">{product.title}</p>;
+    return (
+      <div>
+        <p>{product.price}</p>
+        <p data-testid="product-detail-name">{product.title}</p>
+        <img src={ product.thumbnail } alt={ product.title } />
+      </div>
+    );
   }
 }
 
 ProductDetails.propTypes = {
-  id: PropTypes.string.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
-    path: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
   }).isRequired,
 };
 

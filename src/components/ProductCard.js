@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "../App.css";
-import { Link } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import '../App.css';
+import { Link } from 'react-router-dom';
 
 class ProductCard extends React.Component {
   render() {
@@ -16,8 +16,8 @@ class ProductCard extends React.Component {
           <p className="card-title">{product.title}</p>
           <img
             className="image-card"
-            src={product.thumbnail}
-            alt={product.title}
+            src={ product.thumbnail }
+            alt={ product.title }
           />
           <p className="card-price">{`Valor: R$${product.price}`}</p>
         </Link>
