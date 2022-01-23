@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import {
+  getCategories,
+  getProductsFromCategoryAndQuery,
+} from '../services/api';
 import Loading from '../components/Loading';
 import ProductList from '../components/ProductList';
 import '../App.css';
@@ -43,7 +46,7 @@ class Home extends React.Component {
 
   handleClick = async () => {
     this.setState({ isLoading: true });
-  }
+  };
 
   async getAllCategories() {
     const all = await getCategories();
@@ -52,7 +55,10 @@ class Home extends React.Component {
 
   async a() {
     const { Category, searchText } = this.state;
-    const CatRequest = await getProductsFromCategoryAndQuery(Category, searchText);
+    const CatRequest = await getProductsFromCategoryAndQuery(
+      Category,
+      searchText,
+    );
     this.setState({ listProduct: CatRequest, isLoading: false });
   }
 
@@ -86,12 +92,11 @@ class Home extends React.Component {
             </button>
           </section>
         </header>
-
-        { isLoading && <Loading /> }
-        { listProduct.length !== 0 && <ProductList products={ listProduct } /> }
-
-        <Link data-testid="shopping-cart-button" to="/cart">Cart</Link>
-
+        <Link data-testid="shopping-cart-button" to="/cart">
+          <i className="fas fa-shopping-cart" />
+        </Link>
+        {isLoading && <Loading />}
+        {listProduct.length !== 0 && <ProductList products={ listProduct } />}
         <nav>
           <Categories
             categoriesProp={ categories }
