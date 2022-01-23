@@ -64,3 +64,9 @@
 .tira-ponto {
   list-style-type: none;
 }
+
+i {
+  font-size: 25px;
+  color: black;
+  margin-right: 10px;
+}
